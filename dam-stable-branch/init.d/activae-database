@@ -1,0 +1,45 @@
+#! /bin/bash
+#
+# Activae platform runs 4 services, being the last of them optional:
+# frontend, queue, database, and search.
+#
+# This script launches the database
+#
+# http://activae.cenatic.es/
+#
+
+NAME=activae-database
+BIN=/opt/activae/activae.py
+ARG=--database
+EXEC="$BIN $ARG"
+USER=activae
+
+trap "" 1
+export LANG=C
+
+test -f $BIN || exit 0
+
+case "$1" in
+  start)
+    echo -n "Starting Activae: $NAME"
+    su $USER -c "$EXEC &"
+    ;;
+
+  stop)
+    echo -n "Stopping Activae: $NAME"
+    pkill -f "$EXEC"
+    ;;
+
+  *)
+    echo "Usage: %sysconfdir%/init.d/$NAME {start|stop}"
+    exit 1
+    ;;
+esac
+
+if [ $? == 0 ]; then
+	echo .
+	exit 0
+else
+	echo " failed"
+	exit 1
+fi

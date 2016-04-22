@@ -1,0 +1,199 @@
+Requisitos mínimos de ejecución
+===============================
+
+Máquina con una instalación mínima de Ubuntu 10.04 32bits [1],
+1GB de RAM, 8GB de HDD. En la instalación mínima (la abordada en este documento),
+esta máquina se usará para todos los servicios: Activae, cola de transcodificación
+y API de búsquedas.
+
+1: http://ubuntu.grn.cat/ubuntu-releases/lucid/ubuntu-10.04-server-i386.iso
+
+Tras instalar el sistema básico, se añaden los siguientes paquetes
+necesarios para construir el sistema.
+
+# apt-get install gcc g++ subversion patch wget libxml2-dev mysql-server rrdtool libmysqlclient-dev libjpeg62-dev zlib1g-dev autoconf unzip python-pycurl pkg-config gettext
+
+NOTA IMPORTANTE: Activae es extremadamente flexible y escalable. Su ejecución es óptima cuando todos 
+                 los servicios que despliega corren en diversas máquinas, en condiciones de alta
+                 disponibilidad y balanceo de carga. En este documento se especifica de forma somera
+                 y sencilla la instalación, configuración y ejecución de la plataforma en un solo
+                 servidor. Para configuraciones más complejas, dirigirse al manual del administrador
+                 en la carpeta /doc.
+
+
+Listado de puertos: explicación
+===============================
+
+Activae despliega servicios en diversos puertos. Se especifican a continuación:
+
+Puerto	Descripción
+------------------------------------------------------------------------
+80	Frontend: Balanceador principal para los distintos servidores
+	web.
+9091	Web: Puerto en el que es accesible la interfaz web en toda
+	máquina que corra el servidor de Activae. Estos son los
+	puertos y máquinas balanceados por el Frontend.
+8000	CTK: Puerto utilizado por la plataforma para transmisión de datos
+	asíncronamente.
+8001	Balanceador de la cola de transcodificación, que es un servicio
+	XMLRPC. La IP y puerto de dicho servicio se configura mediante
+	las constantes QUEUE_SERVER y QUEUE_PORT.
+8002	Puerto en el que cada máquina exporta la API de búsquedas
+	mediante XMLRPC. Constante LOOKUP_PORT.
+8003	Puerto en el que cada máquina exporta su cola de
+	transcodificación mediante XMLRPC. Constante PORT.
+33060	DBSlayer: Balanceo asíncrono de MySQL. Parámetro DB_HOST.
+
+Por tanto, para ejecutar satisfactoriamente la plataforma es preciso
+disponer de acceso a dichos puertos. Los parámetros se pueden
+modificar en config.py, en cuyo caso será preciso reconfigurar los
+balanceadores pertinentes mediante la edición de los ficheros:
+
+  frontend/cherokee.conf.orig
+  src/queue/cherokee.conf
+  dabase/cherokee.conf
+
+
+Arquitectura una vez desplegada la plataforma
+=============================================
+
+                  -->  Back-end 1  -----
+                 |     [Port 9091]      |
+                 |                      |                    -> MySQL 1
+Front-end -------|-->  Back-end 2  -----|-->   DBSlayer  ---|
+[Port 80]        |     [Server2: 9091]  |    [Port 33060]    -> MySQL 2
+                 |                      |
+                  -->  Back-end 3  -----
+                       [Server3: 9091]
+
+
+                  -->  Transcode-engine 1
+                 |     [Port 8003]
+                 |
+Queue-balancer --|-->  Transcode-engine 2
+[Port 8001]      |     [Port 8003]
+                 |
+                  -->  Transcode-engine 3
+                       [Port 8003]
+
+Instalación básica
+==================
+
+1) crear usuario y grupo 'activae'
+
+# useradd activae
+
+2) Descomprimir o descargar los fuentes.
+
+En nuestro ejemplo, instalamos todo en opt/activae-inst (ya sea
+descomprimiendo el paquete o copiando ahí los archivos de la forja:
+
+# cd /opt
+# svn checkout https://svn.forge.morfeo-project.org/activae/dam-stable-branch activae-inst
+
+si se descarga directamente el código de la forja, o bien
+
+# cd /opt
+# tar xzfv /ruta/que/sea/activae.tar.gz
+
+si se realiza descomprimiendo los fuentes de un paquete que se ha descargado previamente.
+
+Así, en /opt/activae-inst estarán almacenados todos los archivos necesarios
+para realizar la instalación.
+
+3) Reconfigurar rutas (no recomendable).
+
+Se pueden reconfigurar las rutas de instalacción en
+/opt/activae-inst/deployment/config.py
+
+Opcionalmente se pueden personalizar el resto de rutas en
+/opt/activae-inst/src/config.py, pero esto no es necesario.
+
+El instalador automáticamente detecta y descarga las dependencias que
+no estén en su paquete. 
+
+El instalador utiliza por defecto las rutas especificadas en
+activae-inst/deployment/config.py, por lo que si se desea especificar el
+destino de los archivos bastará con editar dicho fichero. Por defecto
+las descargas se realizarán en /opt/activae_src, y la instalación se
+hará en /opt/activae.
+
+4) Comenzar la instalación
+
+Para lanzar el instalador, bastará con ejecutar lo siguiente:
+
+# cd /opt/activae-inst/deployment
+# sudo make install
+
+El propio instalador pedirá que se creen los directorios y ficheros
+necesarios con los permisos adecuados en caso necesario.
+
+Base de datos
+=============
+La creación de la base de datos y asignación de permisos se haría de
+la siguiente manera:
+
+# mysql -uroot -hlocalhost -p
+[...]
+mysql>	CREATE DATABASE activae;
+	GRANT ALL PRIVILEGES ON activae.* TO activae@localhost IDENTIFIED BY 'activae';
+	GRANT ALL PRIVILEGES ON activae.* TO activae@localhost.localdomain IDENTIFIED BY 'activae';
+	FLUSH PRIVILEGES;
+	quit;
+
+# cd /opt/activae-inst/database
+# mysql -uroot -hlocalhost -p activae < activae.sql
+
+Ambos comandos solicitarán la clave del usuario root del servidor MySQL. Diríjase al manual de MySQL para más información.
+
+Con esto la instalación de la plataforma habrá finalizado. 
+
+Configuración del arranque automático
+=====================================
+
+Primero copiamos los scripts de inicio que acompañana a la plataforma, al lugar 
+adecuado:
+
+# sudo cp /opt/activae/init.d/* /etc/init.d
+
+Y luego configuramos los scripts para cada nivel de ejecución. Usamos los
+valores por defecto
+
+# sudo update-rc.d activae defaults
+
+Ejecución de la plataforma
+==========================
+
+Teniendo en cuenta que, como se especificó al principio de este documento
+estamos hablando de una instalación básica en un solo servidor, para
+correr la aplicación simplemente habrá que hacer:
+
+$ sudo /etc/init.d/activae start
+
+Y esto levantará los servicios de Activae de forma automática:
+
+- Balanceador web.
+- Balanceador de base de datos.
+- Transcodificadores.
+- Exportación de la API.
+
+Y, además, el sistema estará preparado para volver a levantar estos
+servicios automáticamente ante eventuales reinicios del sistema operativo.
+
+NOTA: Activae levanta su propio servidor web en el puerto 80. Esto significa 
+      que si ya hay otro servidor web usando ese puerto (por ejemplo Apache),
+      el inicio de la aplicación dará fallo.
+
+Acceso a Activae
+================
+
+http://localhost
+
+Usuario por defecto: admin
+Clave por defecto..: admin
+
+
+
+
+
+

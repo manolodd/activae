@@ -1,0 +1,22 @@
+config!version = 000099044
+server!bind!1!port = 8001
+server!keepalive = 1
+server!keepalive_max_requests = 500
+server!panic_action = ${tmp}/usr/bin/cherokee-panic
+server!pid_file = ${tmp}/var/run/cherokee.pid
+server!server_tokens = full
+server!timeout = 115
+vserver!10!document_root = /dev/null
+vserver!10!error_writer!type = stderr
+vserver!10!keepalive = 1
+vserver!10!nick = default
+vserver!10!rule!100!handler = proxy
+vserver!10!rule!100!handler!balancer = round_robin
+vserver!10!rule!100!handler!balancer!source!1 = 1
+vserver!10!rule!100!match = default
+vserver!10!rule!100!match!final = 1
+source!1!env_inherited = 1
+source!1!host = 127.0.0.1:8003
+source!1!interpreter = python ${tmp}/activae.py --transcoder=127.0.0.1
+source!1!nick = Queue local 1
+source!1!type = interpreter

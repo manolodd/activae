@@ -1,0 +1,58 @@
+#! /bin/bash
+#
+# Activae platform runs 4 services, being the search API optional:
+# frontend, queue, database, and search API.
+#
+# This script launches all the services
+#
+# http://activae.cenatic.es/
+#
+
+DIR=/opt/activae
+BIN=activae.py
+EXEC=$DIR/$BIN
+CDIR=$DIR/sbin
+USER=activae
+
+trap "" 1
+export LANG=C
+
+test -f $EXEC || exit 0
+
+case "$1" in
+  start)
+    echo -n "Starting Activae"
+    $EXEC --frontend &
+    su $USER -c " $EXEC --web & "
+    su $USER -c " $EXEC --database & "
+    su $USER -c " $EXEC --queue & "
+    su $USER -c " $EXEC --search & "
+    ;;
+
+  stop)
+    echo "Stopping Activae"
+    pkill -f "$EXEC" 2>&1
+    for pid in `ps axw | egrep -i "[^grep]$CDIR/cherokee" | grep -v grep | awk '{ print $1 }'`;
+    do
+	kill $pid 2>&1
+    done
+    sleep 1
+    for pid in `ps axw | egrep -i "[^grep]$CDIR/cherokee-worker" | grep -v grep | awk '{ print $1 }'`;
+    do
+	kill $pid 2>&1
+    done
+    ;;
+
+  *)
+    echo "Usage: %sysconfdir%/init.d/activae {start|stop}"
+    exit 1
+    ;;
+esac
+
+if [ $? == 0 ]; then
+	echo .
+	exit 0
+else
+	echo " failed"
+	exit 1
+fi

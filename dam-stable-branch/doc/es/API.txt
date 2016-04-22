@@ -1,0 +1,111 @@
+# Copyright (C) 2010 CENATIC: Centro Nacional de Referencia de
+# Aplicacion de las TIC basadas en Fuentes Abiertas, Spain.
+#
+# You may contact the copyright holder at: Fundacion CENATIC, Edificio
+# de Servicios Sociales: C/ Vistahermosa, 1, 3ra planta, 06200
+# Almendralejo (Badajoz), Spain
+#
+# This documentation is licensed under CC-By
+
+XML-RPC:
+
+El servidor XML-RPC se lanza por defecto con los parámetros
+especificados en config.py. Acepta los siguientes parámetros:
+
+  --help                  Print this message
+
+ Server:
+  --worker=<IP>           Launch a worker (RPC server)
+
+ Client:
+  --ping                  Ping the server
+
+ Parameters:
+  --listen=<IP>           Bind RCP server to IP
+  --port=<INT>            Use a custom port for the RCP server
+  --server=<IP>           Connect to a custom server
+  --path=<RPC_PATH>       Path to which the rpc_server is restricted
+
+
+Métodos de la API:
+* search:
+  Entrada:	texto | diccionario de búsqueda
+
+  Salida: 	[Asset_id | ...]
+
+  Excepciones:
+	Empty:   búsqueda vacía
+	Invalid: campos incorrectos en el diccionario.
+
+  Notas:
+
+  La búsqueda por texto plano compara las cadenas contra los
+  siguientes campos de la BBDD: 'publisher_name', 'creator_name',
+  'collection_name', 'title', 'subject', 'description'. Es importante
+  señalar que sólo son indexadas palabras de 4 ó más caracteres por
+  defecto en MySQL (esto es configurable a nivel de BBDD). Si hay
+  modificadores booleanos presentes en la cadena de búsqueda (+, -, ~,
+  etc.), la API se encarga de efectuará la búsqueda con dichas
+  restricciones.
+
+  Para las búsquedas utilizando un diccionario de búsquedas, los
+  campos válidos del diccionario son: 'publisher_name',
+  'creator_name', 'collections_name', 'title', 'subject',
+  'description', 'type', 'asset_types_id', 'licenses_id',
+  'collections_id', 'formats_id', 'creator_id', 'publisher_id',
+  'published_flag', 'edited_flag', 'language', 'id','version',
+  'filename', 'transcoding_flag', 'extent','views','date_modified',
+  'date_created', 'date_available', 'version', 'size',
+  'bitrate','width','height'.
+
+  El campo especial "__order__", si existe, será el parámetro usado
+  para el modificador "ORDER BY" de SQL (ej: __order__='views DESC')
+
+  La búsqueda se lleva a cabo de manera inteligente. Es decir:
+
+  1) Se buscan campos idénticos (=) para: 'asset_types_id',
+  'licenses_id', 'collections_id', 'formats_id', 'creator_id',
+  'publisher_id', 'published_flag', 'edited_flag', 'language',
+  'id','version', 'filename', 'transcoding_flag',
+  'extent','views','date_modified', 'date_created', 'date_available',
+  'version', 'size', 'bitrate','width','height'
+
+  2) Se buscan campos similares (LIKE) para: 'publisher_name',
+  'creator_name', 'collections_name', 'title', 'subject',
+  'description', 'type'
+
+  3) Adicionalmente, si se especifican límites de intervalos añadiendo
+  '-' y '+' para el límite inferior y superior respectivamente, se
+  efectúan búsquedas por intervalo para los siguientes campos:
+  'extent','views','date_modified', 'date_created', 'date_available',
+  'version', 'size', 'bitrate','width','height'.
+  Es decir, un diccionario como {'version-': 1, 'version+': 10}
+  restringe la búsqueda a activos cuya versión pertenezca al intervalo
+  [1-10].
+
+* info:
+  Entrada:	ninguna
+  Salida:	{ 'name': nombre_del_proyecto,
+  		  'version': numero de versión }
+  Excepciones: ninguna
+
+* ping:
+  Entrada:	ninguna
+  Salida:	'pong'
+  Excepciones:	ninguna
+
+* get:
+  Entrada:	Asset_id
+  		strict = True|False
+  Salida:	Lista de tuplas DCMI | Diccionario de metadatos DCMI.
+  Excepciones:
+	Empty:		petición vacía
+	Invalid:	activo inválida
+	Unauthorized:	no se autoriza el acceso al activo.
+
+  Notas: Los campos DCMI deben contener una única descripción, aunque
+  puede haber múltiples campos con el mismo nombre para simbolizar
+  relaciones múltiples. Cuando el flag 'strict' no se especifica (o se
+  especifica a True), se devuelve una lista de tuplas (clave DCMI,
+  contenido DCMI). Cuando stric==False, se devuelve un diccionario
+  cuyos campos múltiples se codifican como listas.

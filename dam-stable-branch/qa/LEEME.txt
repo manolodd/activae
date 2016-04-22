@@ -1,0 +1,7 @@
+Este directorio es una reminiscencia de la fase temprana de desarrollo de la aplicación. Se podría eliminar
+sin ningún problema, pero se ha decidido dejarlo como histórico del trabajo realizado en las primeras fases.
+
+No obstante, no se debe usar nada de lo que cuelga de este directorio porque muy probablemente no funcione y
+además es probable que pueda dejar desconfigurada la plataforma.
+
+15/02/2001

@@ -1,0 +1,151 @@
+/* Tab */
+.ui-widget-content { position:relative;
+}
+
+/* Activity notifier */
+#activity { float: right; position: absolute; padding-right: 5px; padding-top: 5px; top:135px; margin-left: 800px; display:none;}
+
+/* Dialogs */
+.ui-dialog .ui-dialog-titlebar {background:#f3f6e6; }
+.ui-dialog .ui-dialog-title { color:#aaa; }
+.ui-dialog .ui-dialog-content { color:#666; }
+
+/* Lookups */
+.propstable .sole_field { width: 400px;}
+.propstable .one_field  { width: 200px;}
+.propstable .two_fields { width: 83px;}
+.propstable select.one_field  { width: 210px;}
+#ui-datepicker-div { background: #f3f6e6; border:1px solid #77aa44;}
+#ui-datepicker-div span {color:#666;}
+
+/* General */
+.propstable .entry {padding:10px; min-width:600px;}
+.propstable .entry .title {font-weight:bold;}
+
+/* Page Login */
+#login_page #wrap  {vertical-align: middle;}
+#login_page #content  {text-align: center; width:95%;}
+#login_page .submitter {text-align:left; margin-left:auto; margin-right:auto; width:550px;}
+
+/* Page Admin */
+#admin_page dl     {padding: 15px; vertical-align: top;}
+#admin_page dt img {width:20px; height:20px; margin-right:10px;}
+#admin_page dd     {margin-left:30px;}
+
+/* Page Report */
+.graphs span {padding-bottom:5px; color:#666; font-size:1.5em;}
+
+/* Meta Widget */
+dl.meta_widget dd { float:left; margin: 3px 0 6px 0;}
+dl.meta_widget dt { clear: both; margin: 3px 0 6px 0;}
+
+/* Meta Collection Widget */
+div.collection_meta dl dd, dl.meta_widget dd { clear:both; margin: 3px 0 6px 50px;}
+div.collection_meta dt, dl.meta_widget dt { clear:both; float:left; margin: 3px 0px 6px 0; font-weight:bold;}
+
+/* Abstract Widget */
+dl.abstract { padding:0 0 010px; line-height:110%;}
+dl.abstract .title,
+dl.abstract .license,
+dl.abstract .author { font-weight:bold; min-width:6em; float:left;}
+dl.abstract .description { font-style:italic;}
+dl.abstract dd { float:left; margin: 3px 0 6px 0;}
+dl.abstract dt { clear: both; margin: 3px 0 6px 0;}
+table.abstract_actions td {font-size: 0.9em; margin:0px; padding:0px; line-height:120%;}
+table.abstract_actions table td {font-size: 1.0em;} /* Bookmark */
+
+/* Pagination */
+table.paginate {margin-left: auto; margin-right: auto;}
+table.paginate td { text-align:center; margin:20px; width: 100px; }
+
+/* Body */
+* {margin:0; padding:0;}
+body {background:#f3f6e6; color:#eee; font:76% Verdana,Arial,Tahoma,"Trebuchet MS",sans-serif; line-height:1.4em; text-align:center; padding:0;}
+
+#metawrapper {width:960px; margin-left: auto; margin-right: auto ;}
+
+#wrap {width:920px; background-color:#fff; color:#555; padding:1%; margin:119px 59px 0 33px; text-align:left; border:1px solid #77aa44;float:left; }
+#top {width:95%; margin:0 auto 15px auto;}
+#skiplinks {width:40%; float:right; color:#ddd; font-size:1.1em; text-align:right; margin:0; padding:0;}
+#skiplinks a {color:#bacac8; border-bottom: 1px dotted #aaa;}
+#skiplinks a:hover {color:#fff; text-decoration:none; border-bottom:1px dotted #fff;}
+
+/* Header and title */
+#logo {min-width:300px; min-height:190px; background:url(/files/public/images/activae_logo.png) no-repeat scroll left top; margin-left:-50px; position:absolute; top:0;}
+
+#cenatic_logo {min-width:348px; min-height:135px; background:url(/files/public/images/cenatic_logo.png) no-repeat scroll left top; margin-left:600px; position:absolute; top:0;}
+
+#logo:hover, #cenatic_logo:hover {cursor: pointer;}
+
+/* Headline */
+#headline {text-align:center; margin:5px 0 15px 0; border:1px solid #e0e0e0; background-color:#f0f0f0; color:#777; font-size:0.9em;}
+#headline p {margin:2px; padding:0;}
+
+/* Headers */
+h1, h2, h3, h4 {margin:0 0 12px; padding-bottom:5px; color:#888; font-weight:400;}
+
+/* Content */
+#content {text-align:left; float:left; width: 700px; margin-top:20px; }
+#content h1 {font-size:2.0em; padding-left:0; }
+#content h2 {font-size:1.7em; letter-spacing:-1px; clear:left;}
+#content h3 {font-size:1.4em; letter-spacing:-1px; margin-bottom:7px;}
+#content h2 a, #content h3 a {font-weight:700; border:0;}
+#content p {margin:0 0 15px;}
+#content a {border-bottom:0px dotted #888;}
+#content a:hover {color: #222; border-bottom:0px dotted #000;}
+#content ul, #content ol {margin:0 0 15px 10px; padding:0 0 0 5px;}
+#content ul li, #content ol li {margin:0 0 4px 0;}
+#content ul ul, #content ol ol {margin:5px 0 5px 10px;}
+#content td, #content th {padding: 0 10px 5px 0;}
+
+/* Sidebar */
+#sidebar {text-align:left; width:160px; overflow-x:hidden; margin:auto; float:left; padding: 10px; margin-right:15px;}
+#sidebar h2, #sidebar h3 {font-size:1.4em; padding:0 0 2px 0; margin:0 0 5px 0; border-bottom:0px solid #ccc;}
+#sidebar p, #sidebar ul, #sidebar ol {margin:0;}
+#sidebar ul li {list-style:none; margin:0 0 3px 0; }
+#sidebar ul li a {font-weight:400; font-size:1.1em; }
+#sidebar ul ul {margin:3px 0 3px 10px; font-size:1em;}
+#sidebar ul ul li {margin:2px 0;}
+#sidebar ul ul li a {font-weight:400;}
+#sidebar ul.sidemenu li {list-style: none; padding:0; margin:0 0 2px 0;}
+#sidebar ul.sidemenu li a {display: block; overflow: visible; padding:2px 5px 2px 5px; background-color:#f4f4f4; font-weight:400; border:1px solid #e0e0e0; font-size:1.1em; }
+#sidebar ul.sidemenu li a:hover, #sidebar ul li.current a {border:1px solid #ddd; color:#444; background-color:#fff;}
+#sidebar ul.sidemenu li.current li a {background-color:#f8f8f8; color:#467aa7; border:1px solid #eee; border-bottom:1px solid #ddd;}
+#sidebar ul.sidemenu ul {margin:0; padding:2px 0 0 15px;}
+#sidebar ul.sidemenu ul li {letter-spacing:0;}
+#sidebar ul.sidemenu ul li a {font-size:0.9em; padding:1px 0 1px 5px;}
+
+/* Footer */
+#footer {clear:both; width:90%; line-height:1.6em; color:#ccc; margin: 0 auto; padding:10px 0; }
+#footer p {margin:0; padding:5px;}
+#footer a {color:#9aaaa8; border-bottom: 1px dotted #aaa;}
+#footer a:hover {color:#ccc; text-decoration:none; border-bottom:1px dotted #fff;}
+#patrons {min-width:940px; min-height:85px; background:url(/files/public/images/patrons.png) no-repeat; margin-left:-15px; border:1px solid #ddd; }
+#patrons p {text-align: right;}
+
+/* Links and tags */
+a {color:#a7c408; font-weight:400; text-decoration:none;}
+a:hover {color:#444; text-decoration:none;}
+img, a img {border:0;}
+
+/* Various classes */
+.left {float:left; width:48%; text-align:left;}
+.right {float:right; width:48%; text-align:left;}
+.trio1 {float:left; width:31%; padding:0 2% 0 0;}
+.trio2 {float:left; width:31%; padding:0 2% 0 0;}
+.trio3 {float:left; width:33%; padding:0;}
+.textleft {text-align:left;}
+.textright {text-align:right;}
+.textcenter {text-align:center;}
+.introtext, .introtext a {font-weight:700;}
+.clear {visibility:hidden; clear:both; height:2px;}
+.hide {display:none;}
+.fixed_width {width:200px;}
+
+/* Box for info about asset parts */
+div.part_info { min-height:130px; margin-left:242px; border:1px solid #efefef;}
+.part_info img { float: right;}
+.part_info p { padding-left: 20px; font-size: 0.8em; line-height:80%;}
+
+/* Login */
+#login input {width:250px;}

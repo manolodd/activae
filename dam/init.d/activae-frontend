@@ -1,0 +1,49 @@
+#! /bin/bash
+#
+# Activae platform runs 4 services, being the last of them optional:
+# frontend, queue, database, and search.
+#
+# This script launches the frontend
+#
+# http://activae.cenatic.es/
+#
+
+NAME=activae-frontend
+BIN=/opt/activae/activae.py
+ARG1=--frontend
+ARG1=--web
+EXEC1="$BIN $ARG1"
+EXEC2="$BIN $ARG2"
+USER=activae
+
+trap "" 1
+export LANG=C
+
+test -f $BIN || exit 0
+
+case "$1" in
+  start)
+    echo -n "Starting Activae: $NAME"
+    $EXEC1 &
+    su $USER -c " $EXEC2 & "
+    ;;
+
+  stop)
+    echo -n "Stopping Activae: $NAME"
+    pkill -f "$EXEC1"
+    pkill -f "$EXEC2"
+    ;;
+
+  *)
+    echo "Usage: %sysconfdir%/init.d/$NAME {start|stop}"
+    exit 1
+    ;;
+esac
+
+if [ $? == 0 ]; then
+	echo .
+	exit 0
+else
+	echo " failed"
+	exit 1
+fi

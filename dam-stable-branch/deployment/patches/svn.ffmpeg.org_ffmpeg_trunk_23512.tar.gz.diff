@@ -1,0 +1,41 @@
+--- ffmpeg-trunk/libswscale/utils.c	(revision 31895)
++++ ffmpeg-trunk/libswscale/utils.c	(working copy)
+@@ -45,6 +45,14 @@
+ #include "libavutil/bswap.h"
+ #include "libavutil/pixdesc.h"
+ 
++uint16_t av_bswap16_tmp;
++uint16_t * av_bswap16 (const uint16_t *a)
++{
++#define  MY_AV_BSWAP16C(x) (((x) << 8 & 0xff00)  | ((x) >> 8 & 0x00ff))
++  av_bswap16_tmp = AV_BSWAP16C(*a);
++  return &av_bswap16_tmp;
++}
++
+ unsigned swscale_version(void)
+ {
+     return LIBSWSCALE_VERSION_INT;
+--- ffmpeg-trunk/libswscale/swscale.h.old	2010-08-23 11:41:14.323824798 +0200
++++ ffmpeg-trunk/libswscale/swscale.h	2010-08-23 11:37:11.795356363 +0200
+@@ -43,6 +43,10 @@
+ 
+ #define LIBSWSCALE_IDENT        "SwS" AV_STRINGIFY(LIBSWSCALE_VERSION)
+ 
++uint16_t av_bswap16_tmp;
++uint16_t * av_bswap16 (const uint16_t *a);
++
++
+ /**
+  * Returns the LIBSWSCALE_VERSION_INT constant.
+  */
+--- ffmpeg-trunk/libswscale/utils.c.orig	2010-10-13 16:24:48.084610481 +0200
++++ ffmpeg-trunk/libswscale/utils.c	2010-10-13 16:27:09.016609534 +0200
+@@ -43,7 +43,7 @@
+ #include "libavutil/x86_cpu.h"
+ #include "libavutil/avutil.h"
+ #include "libavutil/bswap.h"
+-#include "libavutil/opt.h"
++#include "libavcodec/opt.h"
+ #include "libavutil/pixdesc.h"
+ 
+ uint16_t av_bswap16_tmp;

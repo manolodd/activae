@@ -1,0 +1,26 @@
+*** cherokee-0.99.44/cherokee/buffer.c~	2010-01-20 11:41:58.000000000 +0100
+--- cherokee-0.99.44/cherokee/buffer.c	2010-06-18 16:08:33.120288621 +0200
+***************
+*** 1164,1173 ****
+  		   cherokee_buffer_t *src,
+  		   uint32_t          *is_char_escaped)
+  {
+! 	cuint_t      i;
+! 	char        *s, *t;
+! 	cuint_t      n_escape    = 0;
+! 	static char  hex_chars[] = "0123456789abcdef";
+  
+  	if (unlikely (src->buf == NULL)) {
+  		return ret_error;
+--- 1164,1174 ----
+  		   cherokee_buffer_t *src,
+  		   uint32_t          *is_char_escaped)
+  {
+! 	cuint_t        i;
+! 	unsigned char *s;
+! 	unsigned char *t;
+! 	cuint_t        n_escape    = 0;
+! 	static char    hex_chars[] = "0123456789abcdef";
+  
+  	if (unlikely (src->buf == NULL)) {
+  		return ret_error;
